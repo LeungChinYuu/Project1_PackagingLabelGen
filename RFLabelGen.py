@@ -6,6 +6,8 @@ from reportlab.lib.pagesizes import letter
 import barcode
 from barcode.writer import ImageWriter
 
+from PrintInBox import PrintTextInBox
+
 
 ## Function to draw rectangular frame: 
 # Canvas: Target canvas
@@ -138,7 +140,7 @@ def RFLabel_Print(Canvas, Content, Cords = [90,410], NewCanvas=False, TargetFile
 
     # LabelText_Dict： 
     # Keys are the fill-in row and column number on the label;  
-    # Velues are a list of [content text, [xcord,ycord],[font, size]] for the title or fixed text content
+    # Velues are a list of [content text, [xcord,ycord],[font, size]] for the title or fixed text contents
     LabelText_Dict = {
         '1A,1':     ['Vendor Name & Address',                                   [X+110,Y+263],      ['Helvetica', 12.5]],
         '1B,1':     ['Reverie, 750 Denison Ct, Bloomfield Hills, MI 48302',     [X+18, Y+245],      ['Helvetica-Bold', 13]],
@@ -180,20 +182,8 @@ def RFLabel_Print(Canvas, Content, Cords = [90,410], NewCanvas=False, TargetFile
 
 
     '''Enter Ship2Address with multiple line text'''
-    # Print Ship to Address
-    # Set starting position
-    x = X+30
-    y = Y+208
-    line_height = 9 # Typically the font size
-
-    # Split the text into lines
-    lines = Ship2Add.split('\n')
-
-    # Draw each line
-    for line in lines:
-        WriteText(c,x,y,line,font = 'Helvetica-Bold',size = 9)
-        c.drawString(x, y, line)
-        y -= line_height  # Move down for the next line
+    # # Print Ship to Address (use PrintInBox method)
+    PrintTextInBox(c,[X+Xref[1],Y+Yref[4]+42,X+Xref[3],Y+Yref[4]],[15,1],Ship2Add,Font = 'Helvetica-Bold',Alignment = 'L')
 
 
     '''____________________ Generate and Attach Barcodes on Label ______________________________'''
@@ -218,6 +208,7 @@ def RFLabel_Print(Canvas, Content, Cords = [90,410], NewCanvas=False, TargetFile
     c.drawImage(PicPath_PO, X+265, Y+102, width=140, height=22)
     c.drawImage(PicPath_SN, X+231, Y+30, width=145, height=40)
 
+    # Clear barcode PNG files if needed
     if Del_BC_PNG:
         folder_paths = [FolderPath_Sku, FolderPath_PO, FolderPath_SN]
         for folder_path in folder_paths:

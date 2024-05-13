@@ -106,7 +106,7 @@ SkuDict = {
 '''*********************************************************************************************************************************************'''
 '''______________________ !!!Make Sure the Target Folder Path and the R&F PO Info Excel File Name are Correct!!! _______________________________'''
 
-TargetFilePath = 'C:/Python Codes/RnFLabelGen/'
+TargetFilePath = 'C:/Users/Chinyuu Leung/PythonProjects/Project1_PackagingLabelGen/' # 'C:/Python Codes/RnFLabelGen/'
 ExcelFileName = 'Raymour & Flanigan - NEW lables needed.xlsx'
 
 '''*********************************************************************************************************************************************'''
@@ -137,7 +137,7 @@ for i in range(num_sheets):
     df = df[1:]  # Take the data less the header row
     df.columns = new_header  # Set the header row as the df header
     df.reset_index(drop=True, inplace=True)
-
+   
     RFPO = df.iloc[0,0]
     print('This PO number is ',RFPO,'\n\n')
 
@@ -149,10 +149,8 @@ for i in range(num_sheets):
     for index, item in enumerate(Add):
         if index != 0 and not_nan_condition[index]:
             Ship2Add += '\n' + item
-
-    print('The Ship To Address is:\n',Ship2Add,'\n\n')
-
-
+    print(f'The Ship To Address is:\n{Ship2Add}\n\n')
+   
     SN_List = df['Serial number'].tolist()
     # Count non-NaN items (Sku type Qty)
     SN_count = len([item for item in SN_List if pd.notna(item)])
